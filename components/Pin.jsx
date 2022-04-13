@@ -31,7 +31,9 @@ const Pin = (props) => {
         </Pressable>
       </View>
 
-      <Text style={styles.title}>{title}</Text>
+      <Text numberOfLines={2} style={styles.title}>
+        {title}
+      </Text>
     </View>
   );
 };
@@ -45,12 +47,16 @@ const styles = StyleSheet.create({
     aspectRatio: 1 / 1,
   },
   title: {
-    fontSize: 20,
-    fontWeight: "bold",
+    fontSize: 15,
+    lineHeight: 22,
+    fontWeight: "600",
+    letterSpacing: 1,
+    color: "#181818",
     margin: 10,
   },
   pin: {
     width: "100%",
+    padding: 5,
   },
   iconContainer: {
     padding: 8,
