@@ -1,29 +1,69 @@
-import { StyleSheet } from 'react-native';
+import { Image, ScrollView, StyleSheet } from "react-native";
+import MasonaryList from "../components/MasonaryList";
+import { Text, View } from "../components/Themed";
+import pins from "../assets/data/pins";
 
-import EditScreenInfo from '../components/EditScreenInfo';
-import { Text, View } from '../components/Themed';
+import { Feather, MaterialIcons } from "@expo/vector-icons";
 
 export default function ProfileScreen() {
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>Profile Screen</Text>
-    </View>
+    <ScrollView style={styles.container}>
+      <View style={styles.header}>
+        <View style={styles.icons}>
+          <Feather name="share" size={24} color="black" style={styles.icon} />
+          <MaterialIcons
+            name="more-horiz"
+            size={24}
+            color="black"
+            style={styles.icon}
+          />
+        </View>
+        <Image
+          style={styles.image}
+          source={{
+            uri: "https://images.unsplash.com/photo-1618641986557-1ecd230959aa?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8NXx8cHJvZmlsZXxlbnwwfHwwfHw%3D&auto=format&fit=crop&w=500&q=60",
+          }}
+        />
+        <Text style={styles.title}>Sumit @Bravo</Text>
+        <Text style={styles.subTitle}>10k Followers | 125 Followings</Text>
+      </View>
+
+      <MasonaryList pins={pins} />
+    </ScrollView>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
+    width: "100%",
+    backgroundColor: "#fff",
+  },
+  icons: {
+    flexDirection: "row",
+    alignSelf: "flex-end",
+    padding: 10,
+  },
+  icon: {
+    paddingHorizontal: 10,
+  },
+  header: {
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  image: {
+    width: 200,
+    borderRadius: 100,
+    aspectRatio: 1,
+    marginVertical: 10,
   },
   title: {
     fontSize: 20,
-    fontWeight: 'bold',
+    fontWeight: "bold",
+    margin: 10,
   },
-  separator: {
-    marginVertical: 30,
-    height: 1,
-    width: '80%',
+  subTitle: {
+    color: "#181818",
+    fontWeight: "600",
+    margin: 10,
   },
 });
