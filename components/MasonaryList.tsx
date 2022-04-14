@@ -2,7 +2,7 @@ import { useState } from "react";
 import { ScrollView, StyleSheet, useWindowDimensions } from "react-native";
 
 import Pin from "./Pin";
-import { Text, View } from "./Themed";
+import { View } from "./Themed";
 
 interface IMasonaryList {
   pins: {
