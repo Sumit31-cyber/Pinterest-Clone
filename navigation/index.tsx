@@ -28,6 +28,7 @@ import {
 } from "../types";
 import LinkingConfiguration from "./LinkingConfiguration";
 import PinScreen from "../screens/PinScreen";
+import CreatePin from "../screens/CreatePin";
 
 export default function Navigation({
   colorScheme,
@@ -62,6 +63,11 @@ function RootNavigator() {
       <Stack.Screen
         name="Pin"
         component={PinScreen}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name="CreatePin"
+        component={CreatePin}
         options={{ headerShown: false }}
       />
 
@@ -106,7 +112,7 @@ function BottomTabNavigator() {
       />
       <BottomTab.Screen
         name="CreatePin"
-        component={HomeScreen}
+        component={CreatePin}
         options={{
           title: "CreatePin",
           tabBarIcon: ({ color }) => (
