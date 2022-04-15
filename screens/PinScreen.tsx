@@ -7,22 +7,56 @@ import {
   Pressable,
 } from "react-native";
 import React, { useEffect, useState } from "react";
-import pins from "../assets/data/pins";
 import { useNavigation, useRoute } from "@react-navigation/native";
 import {
   SafeAreaView,
   useSafeAreaInsets,
 } from "react-native-safe-area-context";
 import { AntDesign } from "@expo/vector-icons";
+import { useNhostClient } from "@nhost/react";
 
 const PinScreen = () => {
   const [ratio, setRatio] = useState(1);
   const insets = useSafeAreaInsets();
+  const [pin, setPin] = useState([]);
+
+  const nhost = useNhostClient();
 
   const navigation = useNavigation();
   const route = useRoute();
+
   const pinId = route.params.id;
-  const pin = pins.find((p) => p.id === pinId);
+
+  const GET_PINS_QUERY = `
+  query MyQuery ($id : uuid!) {
+    pins_by_pk(id: $id) {
+      created_at
+      id
+      image
+      title
+      user_id
+      user {
+        avatarUrl
+        displayName
+      }
+    }
+  }
+  `;
+
+  const fetchPin = async (pinId) => {
+    const response = await nhost.graphql.request(GET_PINS_QUERY, { id: pinId });
+    if (response.error) {
+      Alert.alert("Error");
+    } else {
+      setPin(response.data.pins_by_pk);
+    }
+    console.log(response);
+  };
+
+  useEffect(() => {
+    fetchPin(pinId);
+  }, [pinId]);
+
   const goBack = () => {
     navigation.goBack();
   };
