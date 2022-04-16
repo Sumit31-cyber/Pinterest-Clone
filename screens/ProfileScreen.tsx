@@ -1,16 +1,21 @@
-import { Image, ScrollView, StyleSheet } from "react-native";
+import { Image, Pressable, ScrollView, StyleSheet } from "react-native";
 import MasonaryList from "../components/MasonaryList";
 import { Text, View } from "../components/Themed";
 import pins from "../assets/data/pins";
 
 import { Feather, MaterialIcons } from "@expo/vector-icons";
+import { useNhostClient, useSignOut } from "@nhost/react";
 
 export default function ProfileScreen() {
+  const { signOut } = useSignOut();
+
   return (
     <ScrollView style={styles.container}>
       <View style={styles.header}>
         <View style={styles.icons}>
-          <Feather name="share" size={24} color="black" style={styles.icon} />
+          <Pressable onPress={signOut}>
+            <Feather name="share" size={24} color="black" style={styles.icon} />
+          </Pressable>
           <MaterialIcons
             name="more-horiz"
             size={24}

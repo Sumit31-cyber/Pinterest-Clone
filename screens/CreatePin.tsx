@@ -9,14 +9,70 @@ import {
   KeyboardAvoidingView,
   ScrollView,
   Pressable,
+  Alert,
 } from "react-native";
 import * as ImagePicker from "expo-image-picker";
+import { useNhostClient } from "@nhost/react";
+import { useNavigation } from "@react-navigation/native";
 
 export default function CreatePin() {
   const [image, setImage] = useState(null);
   const [title, setTitle] = useState("");
 
-  const submit = () => {};
+  const navigation = useNavigation();
+  const CREATE_PIN_MUTATUON = `mutation MyMutation($image: String!, $title: String) {
+    insert_pins(objects: {image: $image, title: $title}) {
+      returning {
+        created_at
+        id
+        image
+        title
+        user_id
+      }
+    }
+  }`;
+  const nhost = useNhostClient();
+
+  const uploadFile = async () => {
+    if (!image) {
+      return {
+        error: {
+          message: "Please select an image",
+        },
+      };
+    }
+    const parts = image.split("/");
+    const name = parts[parts.length - 1];
+    const nameParts = name.split(".")[1];
+    const extension = nameParts[nameParts.length - 1];
+    const result = await nhost.storage.upload({
+      file: {
+        name,
+        type: `image/${extension}`,
+        uri: image,
+      },
+    });
+    return result;
+  };
+
+  const submit = async () => {
+    // Todo Upload image to storage
+    const uploadResult = await uploadFile();
+    if (uploadResult.error) {
+      Alert.alert("Error", uploadResult.error.message);
+      return;
+    }
+
+    const result = await nhost.graphql.request(CREATE_PIN_MUTATUON, {
+      title,
+      image: uploadResult.fileMetadata.id,
+    });
+    if (result.error) {
+      Alert.alert("error Creating Post", result.error.message);
+    } else {
+      navigation.goBack();
+    }
+  };
 
   const pickImage = async () => {
     // No permissions request is necessary for launching the image library
@@ -25,8 +81,6 @@ export default function CreatePin() {
       allowsEditing: true,
       quality: 1,
     });
-
-    console.log(result);
 
     if (!result.cancelled) {
       setImage(result.uri);

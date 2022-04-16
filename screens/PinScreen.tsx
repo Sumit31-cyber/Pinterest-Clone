@@ -1,11 +1,4 @@
-import {
-  Image,
-  StyleSheet,
-  Text,
-  View,
-  StatusBar,
-  Pressable,
-} from "react-native";
+import { StyleSheet, Text, View, StatusBar, Pressable } from "react-native";
 import React, { useEffect, useState } from "react";
 import { useNavigation, useRoute } from "@react-navigation/native";
 import {
@@ -14,9 +7,9 @@ import {
 } from "react-native-safe-area-context";
 import { AntDesign } from "@expo/vector-icons";
 import { useNhostClient } from "@nhost/react";
+import RemoteImage from "../components/RemoteImage";
 
-const PinScreen = () => {
-  const [ratio, setRatio] = useState(1);
+const PinScreen = ({ image }) => {
   const insets = useSafeAreaInsets();
   const [pin, setPin] = useState([]);
 
@@ -37,7 +30,7 @@ const PinScreen = () => {
       user_id
       user {
         avatarUrl
-        displayName
+        displayName 
       }
     }
   }
@@ -62,21 +55,11 @@ const PinScreen = () => {
   };
   if (!pin) return <Text>Pin Not Found</Text>;
 
-  useEffect(() => {
-    if (pin?.image) {
-      Image.getSize(pin.image, (width, height) => setRatio(width / height));
-    }
-  }, [pin]);
-
   return (
     <SafeAreaView style={{ backgroundColor: "black" }}>
       <StatusBar barStyle={"light-content"} />
       <View style={styles.container}>
-        <Image
-          source={{ uri: pin.image }}
-          style={[styles.image, { aspectRatio: ratio }]}
-          resizeMode="cover"
-        />
+        <RemoteImage fileId={pin.image} />
         <Text style={styles.text}>{pin.title}</Text>
         <Pressable
           style={[styles.backBtn, { top: insets.top }]}

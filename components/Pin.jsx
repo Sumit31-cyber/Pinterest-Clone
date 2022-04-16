@@ -3,17 +3,33 @@ import React, { useState, useEffect } from "react";
 import { useNavigation } from "@react-navigation/native";
 
 import { AntDesign } from "@expo/vector-icons";
+import { useNhostClient } from "@nhost/react";
+import RemoteImage from "./RemoteImage";
 
 const Pin = (props) => {
   const { title, image, id } = props.pin;
+  const [imageUri, setImageUri] = useState("");
 
-  const [ratio, setRatio] = useState(1);
+  // const [ratio, setRatio] = useState(1);
+  // const nhost = useNhostClient();
+  // const fetchImage = async () => {
+  //   const result = await nhost.storage.getPresignedUrl({
+  //     fileId: image,
+  //   });
+  //   if (result.presignedUrl?.url) {
+  //     setImageUri(result.presignedUrl.url);
+  //   }
+  // };
 
-  useEffect(() => {
-    if (image) {
-      Image.getSize(image, (width, height) => setRatio(width / height));
-    }
-  }, [image]);
+  // useEffect(() => {
+  //   fetchImage();
+  // }, [image]);
+
+  // useEffect(() => {
+  //   if (imageUri) {
+  //     Image.getSize(imageUri, (width, height) => setRatio(width / height));
+  //   }
+  // }, [imageUri]);
 
   const navigation = useNavigation();
 
@@ -25,13 +41,7 @@ const Pin = (props) => {
   return (
     <Pressable onPress={goToPinPage} style={styles.pin}>
       <View>
-        <Image
-          style={[styles.image, { aspectRatio: ratio }]}
-          resizeMode="cover"
-          source={{
-            uri: image,
-          }}
-        />
+        <RemoteImage fileId={image} />
         <Pressable onPress={onLike} style={styles.iconContainer}>
           <AntDesign name="hearto" size={24} color="black" />
         </Pressable>
